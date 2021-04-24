@@ -1,0 +1,42 @@
+{
+  "ItemList":
+  [
+    {
+      "ID": 1001,
+      "Name": "IronOre",
+      "ItemType": "Material",
+      "StackSize": 100,
+      "Description": "Used for crafting.The most essential basic resource.",
+      "IconPath": "Icons/Material/Iron_Ore"
+    },
+
+    {
+      "ID": 1002,
+      "Name": "CopperOre",
+      "ItemType": "Material",
+      "StackSize": 100,
+      "Description": "Used for crafting.Basic resource mainly used for electricity.",
+      "IconPath": "Icons/Material/Copper_Ore"
+    },
+
+    {
+      "ID": 1003,
+      "Name": "Coal",
+      "ItemType": "Material",
+      "StackSize": 100,
+      "Description": "Mainly used as fuel for vehicles & coal generators and for steel production.",
+      "IconPath": "Icons/Material/Coal"
+    },
+
+    {
+      "ID": 1004,
+      "Name": "Limestone",
+      "ItemType": "Material",
+      "StackSize": 100,
+      "Description": "Used for crafting.Basic resource mainly used for stable foundations.",
+      "IconPath": "Icons/Material/Limestone"
+    }
+
+  ]
+}
+
