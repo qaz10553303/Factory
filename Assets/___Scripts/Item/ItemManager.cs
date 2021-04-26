@@ -9,13 +9,20 @@ public class ItemManager : Singleton<ItemManager>
         public List<Item> ItemList = new List<Item>();
     }
 
-    public ItemData data = new ItemData();
+    public ItemData itemData = new ItemData();
 
+    public class RecipeData
+    {
+        public List<Recipe> RecipeList = new List<Recipe>();
+    }
+
+    public RecipeData recipeData = new RecipeData();
     // Start is called before the first frame update
 
     void Start()
     {
         LoadItemListFromJson();
+        LoadRecipeListFromJson();
     }
 
     void LoadItemListFromJson()
@@ -23,17 +30,37 @@ public class ItemManager : Singleton<ItemManager>
         TextAsset itemText = Resources.Load<TextAsset>("Data/ItemData");//read file
         string jsonData = itemText.text;//convert to json string
         Debug.Log("Got this: " + jsonData);
-        data = JsonUtility.FromJson<ItemData>(jsonData);//convert to json array
+        itemData = JsonUtility.FromJson<ItemData>(jsonData);//convert to json array
 
 
-        Debug.Log("Imported Item Number: " + data.ItemList.Count);
+        Debug.Log("Imported Item Number: " + itemData.ItemList.Count);
+    }
+
+    void LoadRecipeListFromJson()
+    {
+        TextAsset itemText = Resources.Load<TextAsset>("Data/RecipeData");//read file
+        string jsonData = itemText.text;//convert to json string
+        Debug.Log("Got this: " + jsonData);
+        recipeData = JsonUtility.FromJson<RecipeData>(jsonData);//convert to json array
+
+
+        Debug.Log("Imported Recipe Number: " + recipeData.RecipeList.Count);
     }
 
     public Item GetItemById(int ItemID)
     {
-        foreach (Item item in data.ItemList)
+        foreach (Item item in itemData.ItemList)
         {
             if (item.ID == ItemID) return item;
+        }
+        return null;
+    }
+
+    public Recipe GetRecipeById(int RecipeID)
+    {
+        foreach (Recipe recipe in recipeData.RecipeList)
+        {
+            if (recipe.RecipeId == RecipeID) return recipe;
         }
         return null;
     }

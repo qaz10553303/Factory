@@ -18,7 +18,7 @@ namespace BuildSystem
         [Header("Object Settings")]
 
         [Tooltip("Fill this only if you don't use ObjectSelector!")]
-        [SerializeField] BuildItem objectToPlace;
+        public BuildItem objectToPlace;
 
         //**********************************************************************************************
         [Header("Place Settings")]
@@ -69,6 +69,9 @@ namespace BuildSystem
         [Tooltip("Disable the remover script when placer is active. Note: remover must be next to this script")]
         public bool shouldToggleRemover = true;
 
+        public Material ghostRedMat;
+        public Material ghostGreenMat;
+
         /****************************************************
         * Public variables & Classes
         * *************************************************/
@@ -96,7 +99,9 @@ namespace BuildSystem
 
         bool isActive = true;
 
-        bool canPlace = false;
+        public bool canPlace = false;
+
+        bool isOnBuildNode = false;
 
         bool mouseIsNotOnUI = true;
 
@@ -116,6 +121,9 @@ namespace BuildSystem
 
         ObjectRemover object_remover;
 
+
+
+        CameraBehavior camBehavior;
         /****************************************************
         * Init
         * *************************************************/
@@ -135,6 +143,7 @@ namespace BuildSystem
                 Debug.LogError("Settings conflict, faceMe mode can't be enabled in continuous rotation");
                 faceMe = false;
             }
+            camBehavior = Camera.main.GetComponent<CameraBehavior>();
         }
 
         /****************************************************
@@ -152,29 +161,62 @@ namespace BuildSystem
             //place the object
             if (canPlace)
             {
-                if (Input.GetKeyDown(placeKey) && mouseIsNotOnUI)
-                    PlaceGhostObject();
-
-                if (!faceMe)
+                InventoryManager ivty = InventoryManager.Instance;
+                BuildInterface build = BuildInterface.Instance;
+                //bool canBuild = true;
+                //for (int i = 0; i < build.buildingList[build.currentBuildIndex].buildReqInfos.Count; i++)
+                //{
+                //    int itemId = build.buildingList[build.currentBuildIndex].buildReqInfos[i].itemId;
+                //    int itemAmount = build.buildingList[build.currentBuildIndex].buildReqInfos[i].itemAmount;
+                //    if (ivty.CheckItemNumInBag(itemId)<itemAmount)
+                //    {
+                //        canBuild = false;
+                //    }
+                //}
+                if (build.BuildReqCheck())
                 {
-                    if (!useContinuousRotation)
+                    if (Input.GetKeyDown(placeKey))
                     {
-                        if (Input.GetKeyDown(positiveRotateKey))
-                            AddRotation(+1,snapRotationAngle); // positive rotation
-
-                        if (Input.GetKeyDown(negativeRotateKey))
-                            AddRotation(-1,snapRotationAngle); // negative rotation
-                    }
-                    else
-                    {
-                        if (Input.GetKey(positiveRotateKey))
-                            AddRotation(+1, continuousRotationSpeed * Time.deltaTime); // positive rotation
-
-                        if (Input.GetKey(negativeRotateKey))
-                            AddRotation(-1, continuousRotationSpeed * Time.deltaTime); // negative rotation
+                        if (mouseIsNotOnUI && isOnBuildNode)
+                        {
+                            PlaceGhostObject();
+                            build.RemoveReqItemsFromBag();
+                            AudManager.Instance.PlaySFX(3);
+                        }
+                        else if(!isOnBuildNode&&build.buildMode== BuildInterface.BuildMode.BUILD)
+                        {
+                            AudManager.Instance.PlaySFX(0);
+                            PlayerInterface.Instance.PrintMsg("You have to build on a node from other factories or resources", Color.red);
+                        }
                     }
 
+
+                    if (!faceMe)
+                    {
+                        if (!useContinuousRotation)
+                        {
+                            if (Input.GetKeyDown(positiveRotateKey))
+                                AddRotation(+1, snapRotationAngle); // positive rotation
+
+                            if (Input.GetKeyDown(negativeRotateKey))
+                                AddRotation(-1, snapRotationAngle); // negative rotation
+                        }
+                        else
+                        {
+                            if (Input.GetKey(positiveRotateKey))
+                                AddRotation(+1, continuousRotationSpeed * Time.deltaTime); // positive rotation
+
+                            if (Input.GetKey(negativeRotateKey))
+                                AddRotation(-1, continuousRotationSpeed * Time.deltaTime); // negative rotation
+                        }
+
+                    }
                 }
+                else
+                {
+                    PlayerInterface.Instance.PrintMsg("You don't have enough material!", Color.red);
+                }
+                
             }
 
         }
@@ -217,10 +259,20 @@ namespace BuildSystem
         /// <param name="val">Is active</param>
         public void Toggle(bool val)
         {
+            //buildingInterface.SetActive(val);
+            if(val==false)
+            {
+                camBehavior.camMode = CameraBehavior.Mode.CAM_FREE;
+                BuildInterface.Instance.buildMode = BuildInterface.BuildMode.NONE;
+            }
+            else
+            {
+                camBehavior.camMode = CameraBehavior.Mode.UI_ONLY;
+            }
             canPlace = val;
             if (canPlace)
             {
-                CreateGhostObject();
+                //CreateGhostObject();
                 if (object_remover != null)
                 {
                     object_remover.Activate(false);
@@ -268,14 +320,14 @@ namespace BuildSystem
             
 
             Vector3 pivotOffsetExtra;
-            bool objPivotIsBase = isPivotInBase(ghostObjInstance, out pivotOffsetExtra);
+            //bool objPivotIsBase = isPivotInBase(ghostObjInstance, out pivotOffsetExtra);
 
-            //create a fake pivot if the real one is not in base
-            if (!objPivotIsBase)
-            {
-                ghostObjInstance = CreateBasePivot(ghostObjInstance, pivotOffsetExtra);
-                usingFakePivot = true;
-            }
+            ////create a fake pivot if the real one is not in base
+            //if (!objPivotIsBase)
+            //{
+            //    ghostObjInstance = CreateBasePivot(ghostObjInstance, pivotOffsetExtra);
+            //    usingFakePivot = true;
+            //}
 
             if (OnGhostObjectCreation != null)
             {
@@ -306,13 +358,90 @@ namespace BuildSystem
             }
 
             //find hit position and move there the object
-            if (Physics.Raycast(r, out hit, maxPlaceDistance, groundLayer))
+            
+            //if (Physics.Raycast(r, out hit, maxPlaceDistance, LayerMask.GetMask("Factory")))
+            //{
+            //    Transform node = hit.transform.GetComponentInChildren<BuildNode>().transform.parent;
+            //    Transform nearestNode = node.GetChild(0);
+
+            //    float nearestDistToHit = Vector3.Distance(nearestNode.position, hit.point);
+            //    for (int i = 0; i < node.childCount; i++)
+            //    {
+            //        float currentDistToHit = Vector3.Distance(node.GetChild(i).position, hit.point);
+            //        if (currentDistToHit < nearestDistToHit)
+            //        {
+            //            nearestNode = node.GetChild(i);
+            //            nearestDistToHit = currentDistToHit;
+            //        }
+            //    }
+            //    Vector3 pos = nearestNode.position;
+            //    ghostObjInstance.position = pos;
+            //    if (nearestNode.GetComponent<BuildNode>().hasBuildingOnNode)
+            //    {
+            //        ghostObjInstance.GetComponent<MeshRenderer>().sharedMaterial = ghostRedMat;
+            //        isOnBuildNode = false;
+            //        return;
+            //    }
+            //    ghostObjInstance.GetComponent<MeshRenderer>().sharedMaterial = ghostGreenMat;
+            //    isOnBuildNode = true;
+            //    ghostObjInstance.rotation = Quaternion.Euler(new Vector3(0, objectSnapCurrentRotaion, 0));
+            //}
+            if (Physics.Raycast(r, out hit, maxPlaceDistance, LayerMask.GetMask("Resource")))
             {
-                //set object position to hit point
+                Transform node = hit.transform.Find("BuildNodes");
+                Transform nearestNode = node.GetChild(0);
+
+                float nearestDistToHit = Vector3.Distance(nearestNode.position, hit.point);
+                for (int i = 0; i < node.childCount; i++)
+                {
+                    float currentDistToHit = Vector3.Distance(node.GetChild(i).position, hit.point);
+                    if (currentDistToHit < nearestDistToHit)
+                    {
+                        nearestNode = node.GetChild(i);
+                        nearestDistToHit = currentDistToHit;
+                    }
+                }
+                Vector3 pos = nearestNode.position;
+                ghostObjInstance.position = pos;
+                if (nearestNode.GetComponent<BuildNode>().hasBuildingOnNode||ghostObjInstance.tag=="Conveyor"|| ghostObjInstance.tag == "Constructor")
+                {
+                    ghostObjInstance.GetComponent<MeshRenderer>().sharedMaterial = ghostRedMat;
+                    isOnBuildNode = false;
+                    return;
+                }
+                ghostObjInstance.GetComponent<MeshRenderer>().sharedMaterial = ghostGreenMat;
+                isOnBuildNode = true;
+                ghostObjInstance.rotation = Quaternion.Euler(new Vector3(0, objectSnapCurrentRotaion, 0));
+            }
+            else if (Physics.Raycast(r, out hit, maxPlaceDistance, LayerMask.GetMask("BuildNode"))&& !GetComponentInParent<ResourceNode>())
+            {
+                Transform node = hit.transform.GetComponent<BuildNode>().transform;
+                Vector3 pos = node.position;
+                ghostObjInstance.position = pos;
+                if (node.GetComponent<BuildNode>().hasBuildingOnNode)
+                {
+                    ghostObjInstance.GetComponent<MeshRenderer>().sharedMaterial = ghostRedMat;
+                    isOnBuildNode = false;
+                    return;
+                }
+                ghostObjInstance.GetComponent<MeshRenderer>().sharedMaterial = ghostGreenMat;
+                isOnBuildNode = true;
+                ghostObjInstance.rotation = Quaternion.Euler(new Vector3(0, objectSnapCurrentRotaion, 0));
+            }
+            else if (Physics.Raycast(r, out hit, maxPlaceDistance, groundLayer))
+            {
                 Vector3 pos = hit.point;
                 ghostObjInstance.position = pos;
+                AlignGhostToSurface(ghostObjInstance, hit.normal);
+                //if (ghostObjInstance.tag == "Constructor")
+                //{
+                //    ghostObjInstance.GetComponent<MeshRenderer>().sharedMaterial = ghostGreenMat;
+                //    isOnBuildNode = true;
+                //    return;
+                //}
+                ghostObjInstance.GetComponent<MeshRenderer>().sharedMaterial = ghostRedMat;
+                isOnBuildNode = false;
 
-                AlignGhostToSurface(ghostObjInstance,hit.normal);
             }
         }
 

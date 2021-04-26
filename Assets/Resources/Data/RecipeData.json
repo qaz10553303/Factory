@@ -1,0 +1,180 @@
+{
+  "RecipeList":
+  [
+	{
+		"RecipeId":9001,
+		"CraftingTime":2,
+		"InputsArr":
+		[
+			{
+				"id":1001,
+				"amount":1
+			}
+		],
+		"Outputs":
+		{
+			"id":2001,
+			"amount":1
+		}
+	},
+
+	{
+		"RecipeId":9002,
+		"CraftingTime":2,
+		"InputsArr":
+		[
+			{
+				"id":1002,
+				"amount":1
+			}
+		],
+		"Outputs":
+		{
+			"id":2002,
+			"amount":1
+		}
+	},
+	
+	{
+		"RecipeId":9003,
+		"CraftingTime":6,
+		"InputsArr":
+		[
+			{
+				"id":2001,
+				"amount":3
+			}
+		],
+		"Outputs":
+		{
+			"id":2003,
+			"amount":2
+		}
+	},
+	
+	{
+		"RecipeId":9004,
+		"CraftingTime":4,
+		"InputsArr":
+		[
+			{
+				"id":2001,
+				"amount":1
+			}
+		],
+		"Outputs":
+		{
+			"id":2004,
+			"amount":1
+		}
+	},
+
+	{
+		"RecipeId":9005,
+		"CraftingTime":6,
+		"InputsArr":
+		[
+			{
+				"id":2004,
+				"amount":1
+			}
+		],
+		"Outputs":
+		{
+			"id":2005,
+			"amount":4
+		}
+	},
+	
+	{
+		"RecipeId":9006,
+		"CraftingTime":4,
+		"InputsArr":
+		[
+			{
+				"id":2002,
+				"amount":1
+			}
+		],
+		"Outputs":
+		{
+			"id":2006,
+			"amount":2
+		}
+	},
+	
+	{
+		"RecipeId":9007,
+		"CraftingTime":2,
+		"InputsArr":
+		[
+			{
+				"id":2006,
+				"amount":2
+			}
+		],
+		"Outputs":
+		{
+			"id":2007,
+			"amount":1
+		}
+	},
+	
+	{
+		"RecipeId":9008,
+		"CraftingTime":4,
+		"InputsArr":
+		[
+			{
+				"id":1004,
+				"amount":3
+			}
+		],
+		"Outputs":
+		{
+			"id":2008,
+			"amount":1
+		}
+	},
+
+	{
+		"RecipeId": 9009,
+		"CraftingTime": 12,
+		"InputsArr": 
+		[
+			{
+				"id": 2003,
+				"amount": 6
+			},
+			{
+				"id": 2005,
+				"amount": 12
+			}
+		],
+		"Outputs": 
+		{
+			"id": 2009,
+			"amount": 1
+		}
+	},
+
+		{
+			"RecipeId": 9010,
+			"CraftingTime": 6,
+			"InputsArr": 
+			[
+				{
+					"id": 2002,
+					"amount": 2
+				}
+			],
+			"Outputs": 
+			{
+				"id": 2010,
+				"amount": 1
+			}
+		}
+
+	
+  ]
+}

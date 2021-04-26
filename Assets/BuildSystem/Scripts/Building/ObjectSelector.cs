@@ -57,6 +57,13 @@ namespace BuildSystem
 
         private void Start()
         {
+            RetargetList(buildObjectList);
+
+            //objPlacer.SetObjectToPlace(buildObjectList.items[0]); //use the first item as default and set it
+        }
+
+        public void RetargetList(BuildItemContainer buildingContainer)
+        {
             objPlacer = GetComponent<ObjectPlacer>();
             activeKey = objPlacer.ToggleKey;
             if (BuilderMenuPrefab == null)
@@ -70,7 +77,7 @@ namespace BuildSystem
                 return;
             }
 
-            
+            //Transform parent = PlayerInterface.Instance.gameObject.transform;
             builderUI = Instantiate(BuilderMenuPrefab).GetComponentInChildren<IItemSelectionUI>(); //create the ui
             if (builderUI == null)
             {
@@ -82,11 +89,9 @@ namespace BuildSystem
 
             if (!buildObjectList.isValid())
             {
-                Debug.LogError("Please add some some Items to list");
+                //Debug.LogError("Please add some some Items to list");
                 return;
             }
-
-            objPlacer.SetObjectToPlace(buildObjectList.items[0]); //use the first item as default and set it
         }
 
         /****************************************************
@@ -135,15 +140,14 @@ namespace BuildSystem
             if (Input.GetKeyDown(activeKey) && isActive)
             {
                 ToggleUI();
-                isOpen = !isOpen;
-                if (OnMenuToggle != null) OnMenuToggle(isOpen);
+
             }
 
             //handle collapse button press
-            if (Input.GetKeyDown(CollapseMenuKey) && isActive && isOpen)
-            {
-                if (builderUI != null) builderUI.CollapseMenu();
-            }
+            //if (Input.GetKeyDown(CollapseMenuKey) && isActive && isOpen)
+            //{
+            //    if (builderUI != null) builderUI.CollapseMenu();
+            //}
         }
 
         private void FixedUpdate()
@@ -176,8 +180,12 @@ namespace BuildSystem
         /// <summary>
         /// Toggle Object Selection UI menu
         /// </summary>
-        void ToggleUI()
+        public void ToggleUI()
         {
+            isOpen = !isOpen;
+            if (OnMenuToggle != null) OnMenuToggle(isOpen);
+
+
             if (builderUI != null)
             {
                 builderUI.ToggleMenu();
@@ -221,6 +229,11 @@ namespace BuildSystem
             if (index >= 0 && index < buildObjectList.items.Count)
             {
                 objPlacer.SetObjectToPlaceAndCreateGhost(buildObjectList.items[index]);
+
+                Debug.Log("aaa");
+                BuildInterface.Instance.buildReqContent.gameObject.SetActive(true);
+                BuildInterface.Instance.currentBuildIndex = index;
+                BuildInterface.Instance.UpdateBuildSlots();
                 if (OnItemSelect != null) OnItemSelect(index);
             }
             else Debug.LogError("No item for index: " + index);

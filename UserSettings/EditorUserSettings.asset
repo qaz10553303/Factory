@@ -6,27 +6,33 @@ EditorUserSettings:
   serializedVersion: 4
   m_ConfigSettings:
     RecentlyUsedScenePath-0:
-      value: 22424703114646680e0b0227036c6c111b07142f1f2b233e2867083debf42d
-      flags: 0
-    RecentlyUsedScenePath-1:
-      value: 2242470311464668050f082d07215e1c1a573f2b212d357f1d0b2f73d2e93733e3ff33a6c1283a397932cd0e440e083cf90b110eb81e04020517
-      flags: 0
-    RecentlyUsedScenePath-2:
-      value: 224247031146466f0201026233314603021614396c38273326663936efef073be7e933a6c33f32337717e1351027
-      flags: 0
-    RecentlyUsedScenePath-3:
-      value: 224247031146467918070026233a4c04131a570f34292b20212c5200e1e53a3dadf333faf3742a323016f6
-      flags: 0
-    RecentlyUsedScenePath-4:
-      value: 22424703114646680e0b0227036c6b150503563f22213229
-      flags: 0
-    RecentlyUsedScenePath-5:
-      value: 224247031146467d041c1f3650335a020518166a2f2728243f26113fe7f27b1ce7ea39a9a17a3b333a17e2390a2a002bfb050744d20e07045128cd4e12f01e0703ca14c91fda5f1eca0b1980d813d8f7cc
-      flags: 0
-    RecentlyUsedScenePath-6:
       value: 224247031146467d041c1f3650335a020518166a2f2728243f26113fe7f27b1ce7ea39a9a17a3b333a17e2390a2a002bfb050744d20e07045128cd4e12f01e0703ca14c91fda5f1ade151080d813d8f7cc
       flags: 0
+    RecentlyUsedScenePath-1:
+      value: 224247031146467918070026233a4c04131a570f34292b20212c5200e1e53a3dadf333faf3742a323016f6
+      flags: 0
+    RecentlyUsedScenePath-2:
+      value: 22424703114646782a373303240e1034131a17151f2b233e2867083debf42d
+      flags: 0
+    RecentlyUsedScenePath-3:
+      value: 2242470311464678180c096d203150040f071d650d67153328271820ade3213ae7d826fbe82e30282012ea030501123eff1a050ee5080f051440e80018eb09
+      flags: 0
+    RecentlyUsedScenePath-4:
+      value: 224247031146466f0c0007625d637211041c581c6c2c34393b281f3fe7af0730edf078fce9332b25
+      flags: 0
+    RecentlyUsedScenePath-5:
+      value: 224247031146466b0416092e50015008130458676c2429273d26112aadd3373dece225a6c33f32337717e1351027
+      flags: 0
+    RecentlyUsedScenePath-6:
+      value: 224247031146467918070026233a4c04131a5705393c2a39232c3835e4e5372cadc333e4e8750c282b07fc2f303b122bbc1f0702e212
+      flags: 0
     RecentlyUsedScenePath-7:
+      value: 224247031146467918070026233a4c04131a5705393c2a39232c3835e4e5372cadc333e4e8751b39340da1290a371526
+      flags: 0
+    RecentlyUsedScenePath-8:
+      value: 224247031146466432313f21152d5a03593a1d243966333e243d04
+      flags: 0
+    RecentlyUsedScenePath-9:
       value: 224247031146466432313f21152d5a0359231d393866333e243d04
       flags: 0
     lightmappingDeviceAndPlatform:
@@ -42,5 +48,7 @@ EditorUserSettings:
   m_SemanticMergeMode: 2
   m_VCShowFailedCheckout: 1
   m_VCOverwriteFailedCheckoutAssets: 1
-  m_VCOverlayIcons: 1
+  m_VCProjectOverlayIcons: 1
+  m_VCHierarchyOverlayIcons: 1
+  m_VCOtherOverlayIcons: 1
   m_VCAllowAsyncUpdate: 1

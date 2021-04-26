@@ -6,11 +6,13 @@ using UnityEngine.UI;
 public class InventoryManager : Singleton<InventoryManager>
 {
     public List<Slot> bagInfo;
+    public List<Slot> bagExtention;
 
     public List<List<Slot>> containerList = new List<List<Slot>>();
 
     public ItemInfo selectedItemInfo= new ItemInfo();
 
+    [System.Serializable]
     public class ItemInfo
     {
         public int itemId;
@@ -20,12 +22,18 @@ public class InventoryManager : Singleton<InventoryManager>
     // Start is called before the first frame update
     void Start()
     {
-        InitBag();
+        //InitBag();
         containerList.Add(bagInfo);
-        AddItemToBag(1001, 150);
-        AddItemToBag(1002, 150);
-        AddItemToBag(1003, 150);
-        AddItemToBag(1004, 150);
+
+        AddItemToBag(1003, 100);
+        AddItemToBag(2003, 100);
+        AddItemToBag(2004, 100);
+        AddItemToBag(2006, 100);
+        AddItemToBag(2007, 100);
+        AddItemToBag(2008, 200);
+        AddItemToBag(2009, 100);
+        AddItemToBag(2010, 100);
+        //AddItemToBag(2003, 400);
     }
 
     // Update is called once per frame
@@ -39,7 +47,7 @@ public class InventoryManager : Singleton<InventoryManager>
 
     void InitBag()
     {
-        UpdateBagUI(bagInfo);
+        //UpdateBagUI(bagInfo);
     }
 
 
@@ -60,7 +68,7 @@ public class InventoryManager : Singleton<InventoryManager>
                 }
                 else
                 {
-                    UpdateBagUI(bagInfo);
+                    //UpdateBagUI(bagInfo);
                     return 0;
                 }
             }
@@ -77,33 +85,69 @@ public class InventoryManager : Singleton<InventoryManager>
                     slot.itemAmount = maxSize;
                     AddItemToBag(itemId, restSize);
                 }
-                UpdateBagUI(bagInfo);
+                //UpdateBagUI(bagInfo);
                 return 0;
             }
         }
-        UpdateBagUI(bagInfo);
+        //UpdateBagUI(bagInfo);
         return restSize;
     }
 
-    public void UpdateBagUI(List<Slot> container)//set slot sprite and text by itemid and amount
+    public int CheckItemNumInBag(int itemId)
     {
-        for (int i = 0; i < container.Count; i++)
+        int totalAmount = 0;
+        foreach (Slot slot in bagInfo)
         {
-            if (container[i].itemId == 0)
+            if (slot.itemId == itemId)
             {
-                container[i].u_Icon.sprite = null;
-                container[i].u_Icon.enabled = false;
-                container[i].u_Amount.text = "";
-            }
-            else if (container[i].itemId != 0 && container[i].itemAmount > 0)
-            {
-                Sprite sp = Resources.Load<Sprite>(ItemManager.Instance.GetItemById(container[i].itemId).IconPath);
-                container[i].u_Icon.sprite = sp;
-                container[i].u_Icon.enabled = true;
-                container[i].u_Amount.text = container[i].itemAmount.ToString();
+                totalAmount += slot.itemAmount;
             }
         }
+        return totalAmount;
     }
+
+    public bool ReduceItemFromBag(int itemId, int reduceAmount)
+    {
+        if (reduceAmount > CheckItemNumInBag(itemId)) return false;//check item amount before delete
+        foreach (Slot slot in bagInfo)
+        {
+            if (slot.itemId == itemId)
+            {
+                reduceAmount -= slot.itemAmount;
+                if (reduceAmount >= 0)
+                {
+                    slot.ClearSlot();
+                }
+                else if (reduceAmount<0)
+                {
+                    slot.itemAmount = -reduceAmount;
+                    return true;
+                }
+            }
+        }
+        return false;//unexpected error,should not run this line at anytime
+    }
+
+
+    //public void UpdateBagUI(List<Slot> container)//set slot sprite and text by itemid and amount
+    //{
+    //    for (int i = 0; i < container.Count; i++)
+    //    {
+    //        if (container[i].itemId == 0)
+    //        {
+    //            container[i].u_Icon.sprite = null;
+    //            container[i].u_Icon.enabled = false;
+    //            container[i].u_Amount.text = "";
+    //        }
+    //        else if (container[i].itemId != 0 && container[i].itemAmount > 0)
+    //        {
+    //            Sprite sp = Resources.Load<Sprite>(ItemManager.Instance.GetItemById(container[i].itemId).IconPath);
+    //            container[i].u_Icon.sprite = sp;
+    //            container[i].u_Icon.enabled = true;
+    //            container[i].u_Amount.text = container[i].itemAmount.ToString();
+    //        }
+    //    }
+    //}
 
     public int AddItemToSlot(int itemId, int amount, Slot target)
     {
@@ -113,7 +157,6 @@ public class InventoryManager : Singleton<InventoryManager>
         {
             target.itemId = itemId;
             target.itemAmount = amount;
-            selectedItemInfo.itemId = 0;
             return 0;
         }
         else if (target.itemId==itemId)//if target slot stores the same item
@@ -121,7 +164,6 @@ public class InventoryManager : Singleton<InventoryManager>
             target.itemAmount += amount;
             if (target.itemAmount <= maxSize)
             {
-                selectedItemInfo.itemId = 0;
                 return 0;
             }
             else//if over stack
@@ -134,8 +176,14 @@ public class InventoryManager : Singleton<InventoryManager>
         return amount;
     }
 
+    public void GetSlotDataCopy(Slot To, Slot From)
+    {
+        To.itemId = From.itemId;
+        To.itemAmount = From.itemAmount;
+        To.itemsCanStore = From.itemsCanStore;
+        To.itemsCanTake = From.itemsCanTake;
+    }
 
 
-    
 
 }

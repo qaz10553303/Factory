@@ -3,20 +3,18 @@
   [
     {
       "ID": 1001,
-      "Name": "IronOre",
+      "Name": "Iron_Ore",
       "ItemType": "Material",
       "StackSize": 100,
-      "Description": "Used for crafting.The most essential basic resource.",
-      "IconPath": "Icons/Material/Iron_Ore"
+      "Description": "Used for crafting.The most essential basic resource."
     },
 
     {
       "ID": 1002,
-      "Name": "CopperOre",
+      "Name": "Copper_Ore",
       "ItemType": "Material",
       "StackSize": 100,
-      "Description": "Used for crafting.Basic resource mainly used for electricity.",
-      "IconPath": "Icons/Material/Copper_Ore"
+      "Description": "Used for crafting.Basic resource mainly used for electricity."
     },
 
     {
@@ -24,8 +22,7 @@
       "Name": "Coal",
       "ItemType": "Material",
       "StackSize": 100,
-      "Description": "Mainly used as fuel for vehicles & coal generators and for steel production.",
-      "IconPath": "Icons/Material/Coal"
+      "Description": "Mainly used as fuel for vehicles & coal generators and for steel production."
     },
 
     {
@@ -33,10 +30,88 @@
       "Name": "Limestone",
       "ItemType": "Material",
       "StackSize": 100,
-      "Description": "Used for crafting.Basic resource mainly used for stable foundations.",
-      "IconPath": "Icons/Material/Limestone"
-    }
+      "Description": "Used for crafting.Basic resource mainly used for stable foundations."
+    },
 
+    {
+      "ID": 2001,
+      "Name": "Iron_Ingot",
+      "ItemType": "Material",
+      "StackSize": 100,
+      "Description": "Used for crafting.Crafted into the most basic parts."
+    },
+
+    {
+      "ID": 2002,
+      "Name": "Copper_Ingot",
+      "ItemType": "Material",
+      "StackSize": 100,
+      "Description": "Used for crafting.Crafted into the most basic parts."
+    },
+
+    {
+      "ID": 2003,
+      "Name": "Iron_Plate",
+      "ItemType": "Material",
+      "StackSize": 100,
+      "Description": "Used for crafting.Crafted into the most basic parts."
+    },
+
+    {
+      "ID": 2004,
+      "Name": "Iron_Rod",
+      "ItemType": "Material",
+      "StackSize": 100,
+      "Description": "Used for crafting.Crafted into the most basic parts."
+    },
+
+    {
+      "ID": 2005,
+      "Name": "Screw",
+      "ItemType": "Material",
+      "StackSize": 100,
+      "Description": "Used for crafting.Crafted into the most basic parts."
+    },
+
+    {
+      "ID": 2006,
+      "Name": "Wire",
+      "ItemType": "Material",
+      "StackSize": 100,
+      "Description": "Used for crafting.Crafted into the most basic parts."
+    },
+    
+    {
+      "ID": 2007,
+      "Name": "Cable",
+      "ItemType": "Material",
+      "StackSize": 100,
+      "Description": "Used for crafting.Crafted into the most basic parts."
+    },
+    
+    {
+      "ID": 2008,
+      "Name": "Concrete",
+      "ItemType": "Material",
+      "StackSize": 100,
+      "Description": "Used for building.Good for stable foundations."
+    },
+    
+    {
+      "ID": 2009,
+      "Name": "Reinforced_Iron_Plate",
+      "ItemType": "Material",
+      "StackSize": 100,
+      "Description": "Used for crafting.A sturdier and more durable Iron Plate."
+    },
+
+    {
+      "ID": 2010,
+      "Name": "Copper_Sheet",
+      "ItemType": "Material",
+      "StackSize": 100,
+      "Description": "Used for crafting. Primarily used for pipelines due to its high corrosion resistance."
+    }
   ]
 }
 

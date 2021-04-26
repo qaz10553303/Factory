@@ -39,7 +39,6 @@ public class Item
     public string ItemType;
     public int StackSize;
     public string Description;
-    public string IconPath;
 
 }
 

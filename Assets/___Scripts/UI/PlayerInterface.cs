@@ -8,6 +8,11 @@ public class PlayerInterface : Singleton<PlayerInterface>
 {
     GameObject ghostItemUI;
     public GameObject ghostItemPrefab;
+    public Text interactHintText;
+    public string interactHintStr;
+    public GameObject currentUI;
+    public Text msgText;
+    public Text camFreeText;
 
     void Start()
     {
@@ -16,8 +21,18 @@ public class PlayerInterface : Singleton<PlayerInterface>
 
     void Update()
     {
-        InventoryManager.Instance.UpdateBagUI(InventoryManager.Instance.bagInfo);
+        //InventoryManager.Instance.UpdateBagUI(InventoryManager.Instance.bagInfo);
         UpdateIconOnSelected();
+        ShowInteractHintWhenClose();
+
+        if(Camera.main.GetComponent<CameraBehavior>().camMode== CameraBehavior.Mode.CAM_FREE)
+        {
+            camFreeText.gameObject.SetActive(true);
+        }
+        else
+        {
+            camFreeText.gameObject.SetActive(false);
+        }
     }
 
     public void SetInterfaceActive(GameObject obj , bool isActive)
@@ -25,37 +40,73 @@ public class PlayerInterface : Singleton<PlayerInterface>
         obj.SetActive(isActive);
     }
 
-    IEnumerator AutoUpdateUI()
+    public void CloseAllTabs()
     {
-        while (true)
+        if (currentUI)
         {
-            InventoryManager.Instance.UpdateBagUI(InventoryManager.Instance.bagInfo);
-            UpdateIconOnSelected();
-            yield return new WaitForSeconds(1f);
+            currentUI.SetActive(false);
+        }
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Transform interfaceTab = transform.GetChild(i);//get all interfaces under playerInterface
+            for (int j = 0; j < interfaceTab.childCount; j++)
+            {
+                interfaceTab.GetChild(j).gameObject.SetActive(false);//and close everything under each interfaces
+            }
         }
     }
+
+
 
     void UpdateIconOnSelected()
     {
         if (InventoryManager.Instance.selectedItemInfo.itemId != 0&& ghostItemUI==null)
         {
-            Debug.Log("On Ghost Create!");
+            //Debug.Log("On Ghost Create!");
             ghostItemUI = Instantiate(ghostItemPrefab,Input.mousePosition,Quaternion.identity, this.transform);
-            string iconPath = ItemManager.Instance.GetItemById(InventoryManager.Instance.selectedItemInfo.itemId).IconPath;
+            string iconPath = "Icons/Material/"+ ItemManager.Instance.GetItemById(InventoryManager.Instance.selectedItemInfo.itemId).Name;
             ghostItemUI.GetComponentInChildren<Image>().sprite = Resources.Load<Sprite>(iconPath);
             ghostItemUI.GetComponentInChildren<Text>().text = InventoryManager.Instance.selectedItemInfo.itemAmount.ToString();
         }
         else if (InventoryManager.Instance.selectedItemInfo.itemId != 0 && ghostItemUI)
         {
-            Debug.Log("On Ghost Move!");
+            //Debug.Log("On Ghost Move!");
             ghostItemUI.transform.position = Input.mousePosition;
             ghostItemUI.GetComponentInChildren<Text>().text = InventoryManager.Instance.selectedItemInfo.itemAmount.ToString();
         }
         else if (ghostItemUI)
         {
-            Debug.Log("On Ghost Destroy!");
+            //Debug.Log("On Ghost Destroy!");
             Destroy(ghostItemUI);
         }
+    }
+
+    public void ShowInteractHintWhenClose()
+    {
+        interactHintText.text = interactHintStr;
+        if (interactHintStr != "")
+        {
+            interactHintText.gameObject.SetActive(true);
+        }
+        else
+        {
+            interactHintText.gameObject.SetActive(false);
+        }
+
+    }
+
+    public void PrintMsg(string msg, Color msgColor)
+    {
+        StopAllCoroutines();
+        msgText.color = msgColor;
+        StartCoroutine("ShowMsg", (msg));
+    }
+
+    IEnumerator ShowMsg(string msg)
+    {
+        msgText.text = msg;
+        yield return new WaitForSeconds(2);
+        msgText.color = new Color(0, 0, 0, 0);
     }
 }
 

@@ -122,11 +122,11 @@ namespace BuildSystem
             if (ghostMaterial == null) return; // do nothing if no material is set
 
             // replace mesh renderes materials
-            foreach (var mr in g.GetComponentsInChildren<MeshRenderer>())
-            {
-                mr.sharedMaterials = createMarArr(mr.sharedMaterials.Length);
-            }
-
+            //foreach (var mr in g.GetComponentsInChildren<MeshRenderer>())
+            //{
+            //    mr.sharedMaterials = createMarArr(mr.sharedMaterials.Length);
+            //}
+            g.GetComponent<MeshRenderer>().sharedMaterial= ghostMaterial;
             // replace mesh renderes materials
             foreach (var mr in g.GetComponentsInChildren<SkinnedMeshRenderer>())
             {

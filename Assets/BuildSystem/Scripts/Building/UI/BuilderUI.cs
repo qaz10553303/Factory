@@ -134,7 +134,9 @@ namespace BuildSystem
 
             if (collapseAfterSelect && canCollapse)
             {
-                CollapseMenu();              
+                CollapseMenu();
+                Camera.main.GetComponent<CameraBehavior>().camMode = CameraBehavior.Mode.CAM_FREE;
+                BuildInterface.Instance.buildMode = BuildInterface.BuildMode.BUILD;
             }
 
         }
@@ -164,10 +166,10 @@ namespace BuildSystem
                 item.SetUp(container.items[i]);
                 item.AddButtonListner(selector.UseItem, i);
 
-                if (i == 0) //select the first button
-                {
-                    SetSelectedItem(item);
-                }
+                //if (i == 0) //select the first button
+                //{
+                //    SetSelectedItem(item);
+                //}
             }
         }
 
